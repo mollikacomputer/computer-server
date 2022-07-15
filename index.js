@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const port = process.env.PORT || 5000;
-// const ObjectId = require('mongodb').ObjectId;
+const ObjectId = require('mongodb').ObjectId;
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
 app.use(cors());
@@ -19,16 +19,32 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 async function run(){
     try{
-        // this 2 lines is for database connection and create serviceCollection
+        // this 2 lines is for globally database connection for this function and create serviceCollection
         await client.connect();
         const serviceCollection = client.db("computer").collection("service");
-// add new service
+        // start add new service
         app.post('/service', async (req, res) => {
             const newService = req.body;
             console.log('adding new service', newService);
             const result = await serviceCollection.insertOne(newService);
             res.send(result);
         });
+        // end add new service
+        // start get data from mongodb
+        app.get('/service', async(req, res) => {
+            const query = {};
+            const cursor = serviceCollection.find(query);
+            const service = await cursor.toArray();
+            res.send(service);
+        });
+        // catch one data from database
+        app.get('/service/:id', async(req, res) => {
+            const id = req.params.id;
+            const query = {_id: ObjectId(id)}
+            const result = await serviceCollection.findOne(query);
+            res.send(result);
+        });
+        // end get data from mongodb
 
     }
     finally{
