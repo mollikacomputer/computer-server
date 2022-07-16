@@ -1,3 +1,4 @@
+
 const express = require('express');
 const app = express();
 const cors = require('cors');
@@ -45,6 +46,14 @@ async function run(){
             res.send(result);
         });
         // end get data from mongodb
+        // Start delete data from mongodb and UI
+        app.delete('/service/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = {_id: ObjectId(id)};
+            const result = await serviceCollection.deleteOne(query);
+            res.send(result);
+        })
+        // END delete data from mongodb and UI
 
     }
     finally{
@@ -57,3 +66,63 @@ app.listen(port, ()=>{
     console.log(`listent to prt ${port}`,);
 });
 
+
+// const express = require('express');
+// const app = express();
+// const port = process.env.PORT || 5000;
+// // const ObjectId = require('mongodb').ObjectId;
+// const cors = require('cors');
+// // bottom 1 line get from mongodb app
+// // const {MongoClient, ServerApiVersion} = require('mongodb');
+
+// app.use(cors());
+// app.use(express.json());
+
+// app.get('/', (req, res) => {
+//     res.send('Server app testing for success')
+// });
+
+// async function run(){
+//     try{
+
+        // await client.connect();
+        // const serviceCollection = client.db("computer").collection("service");
+        // await client.connect();
+        // const serviceCollection = client.db('computer').collection('service');
+
+        // app.post('/service', async (req, res) => {
+        //     const newService = req.body;
+        //     console.log('adding new service successfully', newService);
+        //     const result = await serviceCollection.insertOne(newService);
+        //     res.send(result);
+        // });
+
+
+        // app.post('/service', async (req, res) => {
+        //     const newService = req.body;
+        //     console.log('adding new service successfully', newService);
+        //     const result = await serviceCollection.insertOne(newService);
+        //     res.send(result);
+        // } );
+
+        // app.post('/service', async(req, res) => {
+        //     const newService = req.body;
+        //     console.log('adding new service successfully', newService);
+        //     const result = await serviceCollection.insertOne(newService);
+        //     res.send(result);
+        // });
+        
+//     }
+//     finally{
+//         // await client.close();
+//         // await client.close();
+//         // // await client.close();
+//         // await client.close();
+//         // await client.close();
+//     }
+// }
+// run().catch(console.dir);
+
+// app.listen(port, (req, res)=>{
+//     console.log(`Listen to port ${port} `);
+// })
