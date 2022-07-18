@@ -54,6 +54,23 @@ async function run(){
             res.send(result);
         })
         // END delete data from mongodb and UI
+        //start update service
+        app.put('/service/:id', async(req, res) => {
+            const id = req.params.id;
+            const updatedService = req.body;
+            const filter = {_id: ObjectId()}
+            const options = {upsert:true}
+            const updatedDoc = {
+                $set:{
+                    name: updatedService.name,
+                    pic : updatedService.pic,
+                    description : updatedService.description
+                }
+            };
+            const result = await serviceCollection.updateOne(filter, updatedDoc, options);
+            res.send(result);
+        })
+        // end update service
 
     }
     finally{
