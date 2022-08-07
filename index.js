@@ -25,6 +25,7 @@ async function run(){
         // this 2 lines is for globally database connection for this function and create serviceCollection
         await client.connect();
         const serviceCollection = client.db("computer").collection("service");
+        const userCollection = client.db("computer").collection("user");
         // start add new service
         app.post('/service', async (req, res) => {
             const newService = req.body;
@@ -74,6 +75,15 @@ async function run(){
             res.send(result);
         })
         // end update service
+        //start user route 
+        //add new user or post user
+        app.post('/user', async (req, res) => {
+            const newUser = req.body;
+            console.log('adding new user', newUser);
+            const result = await userCollection.insertOne(newUser);
+            res.send(result);
+        });
+
 
     }
     finally{
