@@ -85,7 +85,7 @@ async function run(){
         });
         // end add new user or post user
         // start get user from server or read user
-        app.get('/user', async(req, res) =>{
+        app.get('/user', async (req, res) =>{
             const query = {};
             const cursor = userCollection.find(query);
             const users = await cursor.toArray();
